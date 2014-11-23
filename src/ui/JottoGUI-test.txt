@@ -1,0 +1,4 @@
+Manual testing for Jotto GUI
+============================
+
+TODO: Document your manual testing strategy
