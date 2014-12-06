@@ -1,4 +1,56 @@
 Manual testing for Jotto GUI
 ============================
 
-TODO: Document your manual testing strategy
+Testing partition: Setting puzzle, making guess
+
+I. Setting puzzle
+	-on start of the GUI, there should already be a puzzle already selected
+	we test steps each case of a followed by each case of b
+	a. enter puzzle number:
+		i.  negative
+		ii. 0
+		iii. has nonnumerical characters
+		iv. positive  
+	b. submitting puzzle number: 	
+		i. pressing the button
+		ii. hitting return on keyboard to submit
+	Expected result: 
+		a-i., a-ii., or a-iii. then b -> random puzzle generation
+		a-iv. then b -> generate puzzle with submitted ID
+		
+II. Making guesses (on puzzle 1)
+	a. Submitting guesses for puzzle 1
+		i. submit a "hello" word and press enter -> print a "guess 2 1" response
+		ii. submit "hell" -> print a error 2
+		iii. submit a "hell*" -> print a delayed "guess 1 1" response
+		iv. submit "tolas" -> print "you win!"
+		
+	b. Recording guesses: induce normal printout, error 0 (ill-formated), error 2 (Invalid guess)
+		-type "hello" - expect guess 2 1 to appear
+		-type "hell" -expect Invalid guess to show next to word
+		-type "hell*" - expect guess 1 1 to appear
+		-type "tolas" - expect "you win!"
+		-expect scrollbar
+		-reset puzzle, table should be clear
+	
+	c. Testing thread safety:
+		a. On guesses:
+		-type "hello" - expect guess 2 1
+		-type "hell*", "fell*", "bell*", "crab!", "salt*", "salts"
+			-each guess should appear immediately, 
+			-responses for "hello", "crab!" and "salts"
+				 should all appear immediately
+			Final Result: 
+			"hell*" guess 1 1
+			"fell*" guess 1 1
+			"bell*" guess 1 1
+			"crab!" Invalid guess
+			"salt*" guess 4 1
+			"salts" guess 4 2
+		b. On resetting puzzles:
+		-type "hello" and reset puzzle to 1 -> updates table and changes puzzle
+		-type "hell*" and reset puzzle to 1 
+		-> resets puzzle text field to empty, updates the puzzle
+		->after some time, nothing should appear 
+		-type "hell*", "hello", results should appear as normal	
+		
